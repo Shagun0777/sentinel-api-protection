@@ -116,16 +116,23 @@ sentinel-api-protection
 
 ## 1 Clone repository
 
+```
+
 git clone https://github.com/YOUR_USERNAME/sentinel-api-protection.git
 
 cd sentinel-api-protection
 
+```
 
 ---
 
 ## 2 Start services
 
+```
+
 docker compose up --build
+
+```
 
 This launches:
 
@@ -161,8 +168,11 @@ You can simulate high-traffic scenarios.
 
 ## Normal Traffic
 
+```
 for i in {1..100}; do curl http://localhost:3000/search
 ; done
+
+```
 
 
 Expected behaviour:
@@ -174,8 +184,10 @@ Expected behaviour:
 
 ## Attack Simulation
 
+```
 seq 2000 | xargs -P100 -I{} curl http://localhost:3000/search
 
+```
 
 Expected behaviour:
 
@@ -217,9 +229,11 @@ Example:
 
 Prometheus query:
 
+```
 
 sum(increase(sentinel_requests_total[5m]))
 
+```
 
 Explanation:
 
@@ -235,9 +249,11 @@ Screenshot:
 
 Prometheus query:
 
+```
 
 sum(sentinel_blocked_requests_total)
 
+```
 
 Explanation:
 
@@ -253,9 +269,11 @@ Screenshot:
 
 Prometheus query:
 
+```
 
 sum by(route)(rate(sentinel_requests_total[1m]))
 
+```
 
 Explanation:
 
@@ -271,9 +289,11 @@ Screenshot:
 
 Prometheus query:
 
+```
 
 sum by(route)(increase(sentinel_requests_total[5m]))
 
+```
 
 Explanation:
 
@@ -289,10 +309,12 @@ Screenshot:
 
 Prometheus query:
 
+```
 
 sum(increase(sentinel_blocked_requests_total[5m])) /
 sum(increase(sentinel_requests_total[5m]))
 
+```
 
 Explanation:
 
@@ -308,10 +330,12 @@ Screenshot:
 
 Prometheus query:
 
+```
 
 sum(rate(sentinel_requests_total[1m])) /
 sum(rate(sentinel_requests_total[5m]))
 
+```
 
 Explanation:
 
