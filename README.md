@@ -357,17 +357,17 @@ Example platforms:
 
 Run:
 
-
+```
 docker compose up -d
-
+```
 
 Expose ports:
 
-
+```
 3000 API
 3001 Grafana
 9090 Prometheus
-
+```
 
 ---
 
@@ -383,11 +383,11 @@ Add a screenshot showing the dashboard during a simulated attack.
 
 Prometheus metrics exposed by Sentinel:
 
-
+```
 sentinel_requests_total
 sentinel_blocked_requests_total
 sentinel_rate_limit_hits
-
+```
 
 ---
 
