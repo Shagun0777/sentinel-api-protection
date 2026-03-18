@@ -169,8 +169,7 @@ You can simulate high-traffic scenarios.
 ## Normal Traffic
 
 ```
-for i in {1..100}; do curl http://localhost:3000/search
-; done
+for i in {1..100}; do curl http://localhost:3000/search ; done
 
 ```
 
@@ -311,8 +310,7 @@ Prometheus query:
 
 ```
 
-sum(increase(sentinel_blocked_requests_total[5m])) /
-sum(increase(sentinel_requests_total[5m]))
+sum(increase(sentinel_blocked_requests_total[5m])) / sum(increase(sentinel_requests_total[5m]))
 
 ```
 
@@ -332,8 +330,7 @@ Prometheus query:
 
 ```
 
-sum(rate(sentinel_requests_total[1m])) /
-sum(rate(sentinel_requests_total[5m]))
+sum(rate(sentinel_requests_total[1m])) / sum(rate(sentinel_requests_total[5m]))
 
 ```
 
