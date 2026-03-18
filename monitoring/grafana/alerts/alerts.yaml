@@ -1,0 +1,128 @@
+apiVersion: 1
+groups:
+    - orgId: 1
+      name: sentinel-evaluation
+      folder: Sentinel Alerts
+      interval: 30s
+      rules:
+        - uid: dfgblobx4f8cge
+          title: High Blocked Traffic Ratio
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: cfgaf3ks1ex34d
+              model:
+                editorMode: code
+                expr: |-
+                    sum(increase(sentinel_blocked_requests_total[5m]))
+                    /
+                    sum(increase(sentinel_requests_total[5m]))
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: C
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0.3
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params: []
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 1m
+          annotations:
+            description: |-
+                Blocked traffic ratio exceeded 30%.
+                Sentinel detected abnormal traffic behavior.
+
+                Check endpoint attack panels for investigation.
+            summary: |-
+                High blocked traffic ratio detected
+                Possible API attack in progress
+          isPaused: false
+          notification_settings:
+            receiver: grafana-ui
+        - uid: ffgbp1pyfwj5sa
+          title: Endpoint Under Attack
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: cfgaf3ks1ex34d
+              model:
+                editorMode: code
+                expr: topk(1, sum by(route)(increase(sentinel_blocked_requests_total[5m])))
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: C
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 100
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params: []
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 1m
+          annotations:
+            description: |-
+                Sentinel detected an abnormal spike in blocked requests targeting a specific API endpoint.
+
+                This usually indicates a potential attack such as:
+                • brute-force attempts
+                • automated bot traffic
+                • scraping attempts
+                • denial-of-service behavior
+
+                Check the Grafana dashboard panel "Blocked Requests per Endpoint"
+                to identify the targeted route and investigate further.
+            summary: High number of blocked requests detected for an API endpoint.
+          isPaused: false
+          notification_settings:
+            receiver: grafana-ui

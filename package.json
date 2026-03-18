@@ -1,0 +1,28 @@
+{
+  "name": "sentinel-api-protection",
+  "version": "1.0.0",
+  "description": "Distributed rate limiting and abuse detection system using Redis, Prometheus, and Node.js",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shagun0777/sentinel-api-protection.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Shagun0777/sentinel-api-protection/issues"
+  },
+  "homepage": "https://github.com/Shagun0777/sentinel-api-protection#readme",
+  "dependencies": {
+    "express": "^5.2.1",
+    "ioredis": "^5.10.0",
+    "pino": "^10.3.1",
+    "pino-pretty": "^13.1.3",
+    "prom-client": "^15.1.3"
+  }
+}
