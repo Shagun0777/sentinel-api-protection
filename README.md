@@ -116,7 +116,6 @@ sentinel-api-protection
 ```
 ---
 
-```markdown
 # How Sentinel Stops Attacks
 
 Sentinel uses a multi-layer defense strategy.
