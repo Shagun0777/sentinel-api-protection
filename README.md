@@ -1,54 +1,58 @@
 # Sentinel API Protection
 
-A **Node.js API protection layer** implementing **distributed rate limiting, attack detection, and observability** using **Redis, Prometheus, and Grafana**.
+A **distributed API protection system** built with **Node.js, Redis, Prometheus, and Grafana**.
 
-Sentinel monitors API traffic in real time, detects suspicious spikes, and blocks abusive clients while exposing detailed metrics for monitoring and analysis.
+Sentinel protects backend APIs from abusive clients by implementing:
 
----
+- distributed rate limiting
+- traffic spike detection
+- IP reputation scoring
+- real-time monitoring dashboards
 
-# Features
-
-- Token Bucket rate limiter
-- Sliding Window rate limiting
-- Redis-based distributed coordination
-- IP reputation filtering
-- Prometheus metrics instrumentation
-- Grafana security dashboard
-- Real-time API traffic monitoring
-- Traffic spike detection
-- Blocked request analytics
-- Attack simulation testing
+The system detects abnormal traffic patterns and automatically blocks malicious clients while exposing observability metrics for monitoring.
 
 ---
 
-# Architecture
+## Key Capabilities
+
+• Distributed Rate Limiting  
+• Real-Time Traffic Monitoring  
+• Attack Detection  
+• Automated IP Blocking  
+• Prometheus Metrics Export  
+• Grafana Security Dashboard  
+
+---
+
+## Example Attack Flow
 
 Sentinel uses a layered API protection architecture.
 
 ```
 
-Client Requests
-│
-▼
-Node.js API Gateway
-│
-▼
-Rate Limiter Layer
-├─ Token Bucket
-├─ Sliding Window
-└─ IP Reputation Check
-│
-▼
-Redis (Distributed State)
-│
-▼
-Prometheus Metrics Exporter
-│
-▼
-Prometheus
-│
-▼
-Grafana Dashboard
+             Client Requests
+                    │
+                    ▼
+           Node.js API Gateway
+                    │
+                    ▼
+           Rate Limiting Layer
+        ┌────────────┼────────────┐
+        │            │            │
+   Token Bucket   Sliding Window   Reputation Check
+        │
+        ▼
+      Redis
+(distributed state storage)
+        │
+        ▼
+ Prometheus Metrics Exporter
+        │
+        ▼
+      Prometheus
+        │
+        ▼
+     Grafana Dashboard
 
 ```
 
@@ -111,6 +115,33 @@ sentinel-api-protection
 
 ```
 ---
+
+```markdown
+# How Sentinel Stops Attacks
+
+Sentinel uses a multi-layer defense strategy.
+
+1️⃣ **Traffic Spike Detection**
+
+Prometheus monitors request volume and detects sudden traffic spikes.
+
+2️⃣ **Rate Limiting**
+
+If a client sends too many requests within a short window, the rate limiter blocks excess traffic.
+
+3️⃣ **Reputation System**
+
+Repeated violations increase the client's reputation score.
+
+When the score exceeds the threshold, the IP is automatically banned.
+
+4️⃣ **Permanent Blocking**
+
+Banned clients receive:
+
+HTTP 403 Forbidden
+
+and cannot access the API until the block expires.
 
 # Running the Project
 
@@ -211,16 +242,9 @@ The dashboard tracks:
 
 ---
 
-# Grafana Dashboard
+### Dashboard Overview
 
-Add a screenshot showing the full dashboard.
-
-/screenshots/dashboard-overview.png
-
-
-Example:
-
-
+![Dashboard Overview](screenshot/dashboard-overview.jpeg)
 
 ---
 

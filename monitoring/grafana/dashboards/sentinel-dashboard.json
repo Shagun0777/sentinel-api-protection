@@ -23,8 +23,9 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "cfgaf3ks1ex34d"
+                "uid": "bfgeg1vl70tfkb"
             },
+            "description": "Shows how many requests happened in last minute",
             "fieldConfig": {
                 "defaults": {
                     "color": {
@@ -76,10 +77,11 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "cfgaf3ks1ex34d"
+                        "uid": "bfgeg1vl70tfkb"
                     },
                     "editorMode": "code",
-                    "expr": "sum(sentinel_requests_total)",
+                    "expr": "sum(increase(sentinel_requests_total[1m]))",
+                    "instant": false,
                     "legendFormat": "__auto",
                     "range": true,
                     "refId": "A"
@@ -91,7 +93,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "cfgaf3ks1ex34d"
+                "uid": "bfgeg1vl70tfkb"
             },
             "fieldConfig": {
                 "defaults": {
@@ -143,9 +145,11 @@
             "targets": [
                 {
                     "editorMode": "code",
-                    "expr": "sum(sentinel_blocked_requests_total)",
+                    "exemplar": false,
+                    "expr": "sum(increase(sentinel_blocked_requests_total[5m]))",
+                    "instant": true,
                     "legendFormat": "__auto",
-                    "range": true,
+                    "range": false,
                     "refId": "A"
                 }
             ],
@@ -155,8 +159,9 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "cfgaf3ks1ex34d"
+                "uid": "bfgeg1vl70tfkb"
             },
+            "description": "requests per second\nper endpoint",
             "fieldConfig": {
                 "defaults": {
                     "color": {
@@ -214,8 +219,8 @@
                 "overrides": []
             },
             "gridPos": {
-                "h": 11,
-                "w": 24,
+                "h": 13,
+                "w": 8,
                 "x": 0,
                 "y": 8
             },
@@ -249,8 +254,9 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "cfgaf3ks1ex34d"
+                "uid": "bfgeg1vl70tfkb"
             },
+            "description": "blocks per second",
             "fieldConfig": {
                 "defaults": {
                     "color": {
@@ -308,10 +314,10 @@
                 "overrides": []
             },
             "gridPos": {
-                "h": 9,
-                "w": 24,
-                "x": 0,
-                "y": 19
+                "h": 13,
+                "w": 8,
+                "x": 8,
+                "y": 8
             },
             "id": 4,
             "options": {
@@ -343,8 +349,9 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "cfgaf3ks1ex34d"
+                "uid": "bfgeg1vl70tfkb"
             },
+            "description": "which endpoint received traffic",
             "fieldConfig": {
                 "defaults": {
                     "color": {
@@ -391,10 +398,10 @@
                 "overrides": []
             },
             "gridPos": {
-                "h": 8,
-                "w": 24,
-                "x": 0,
-                "y": 28
+                "h": 13,
+                "w": 8,
+                "x": 16,
+                "y": 8
             },
             "id": 6,
             "options": {
@@ -438,8 +445,156 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "cfgaf3ks1ex34d"
+                "uid": "bfgeg1vl70tfkb"
             },
+            "description": "percentage of traffic blocked",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "decimals": 2,
+                    "mappings": [],
+                    "max": 1,
+                    "min": 0,
+                    "thresholds": {
+                        "mode": "percentage",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": 0
+                            },
+                            {
+                                "color": "#EAB839",
+                                "value": "10"
+                            },
+                            {
+                                "color": "dark-red",
+                                "value": 30
+                            }
+                        ]
+                    },
+                    "unit": "percent"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 13,
+                "w": 8,
+                "x": 0,
+                "y": 21
+            },
+            "id": 5,
+            "options": {
+                "minVizHeight": 75,
+                "minVizWidth": 75,
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "showThresholdLabels": false,
+                "showThresholdMarkers": true,
+                "sizing": "auto"
+            },
+            "pluginVersion": "12.4.1",
+            "targets": [
+                {
+                    "editorMode": "code",
+                    "exemplar": false,
+                    "expr": "sum(increase(sentinel_blocked_requests_total[5m]))\n/\nsum(increase(sentinel_requests_total[5m]))",
+                    "instant": true,
+                    "legendFormat": "__auto",
+                    "range": false,
+                    "refId": "A"
+                }
+            ],
+            "title": "Blocked Traffic Ratio",
+            "type": "gauge"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "bfgeg1vl70tfkb"
+            },
+            "description": "short-term traffic\n÷\nlong-term traffic",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "mappings": [],
+                    "max": 20,
+                    "min": 0,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": 0
+                            },
+                            {
+                                "color": "#EAB839",
+                                "value": 1.5
+                            },
+                            {
+                                "color": "orange",
+                                "value": 5
+                            },
+                            {
+                                "color": "red",
+                                "value": 8
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 13,
+                "w": 8,
+                "x": 8,
+                "y": 21
+            },
+            "id": 8,
+            "options": {
+                "minVizHeight": 75,
+                "minVizWidth": 75,
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "showThresholdLabels": false,
+                "showThresholdMarkers": true,
+                "sizing": "auto"
+            },
+            "pluginVersion": "12.4.1",
+            "targets": [
+                {
+                    "editorMode": "code",
+                    "expr": "sum(rate(sentinel_requests_total[30s]))\n/\nsum(rate(sentinel_requests_total[5m]))",
+                    "instant": true,
+                    "legendFormat": "__auto",
+                    "range": false,
+                    "refId": "A"
+                }
+            ],
+            "title": "Traffic Spike Detector",
+            "type": "gauge"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "bfgeg1vl70tfkb"
+            },
+            "description": "which endpoint triggered blocking",
             "fieldConfig": {
                 "defaults": {
                     "color": {
@@ -484,10 +639,10 @@
                 "overrides": []
             },
             "gridPos": {
-                "h": 10,
-                "w": 24,
-                "x": 0,
-                "y": 36
+                "h": 13,
+                "w": 8,
+                "x": 16,
+                "y": 21
             },
             "id": 7,
             "options": {
@@ -526,167 +681,23 @@
             ],
             "title": "Blocked Requests per Endpoint",
             "type": "barchart"
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "cfgaf3ks1ex34d"
-            },
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "decimals": 2,
-                    "mappings": [],
-                    "max": 1,
-                    "min": 0,
-                    "thresholds": {
-                        "mode": "percentage",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": 0
-                            },
-                            {
-                                "color": "#EAB839",
-                                "value": "10"
-                            },
-                            {
-                                "color": "dark-red",
-                                "value": 30
-                            }
-                        ]
-                    },
-                    "unit": "percentunit"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 8,
-                "w": 24,
-                "x": 0,
-                "y": 46
-            },
-            "id": 5,
-            "options": {
-                "minVizHeight": 75,
-                "minVizWidth": 75,
-                "orientation": "auto",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "showThresholdLabels": false,
-                "showThresholdMarkers": true,
-                "sizing": "auto"
-            },
-            "pluginVersion": "12.4.1",
-            "targets": [
-                {
-                    "editorMode": "code",
-                    "exemplar": false,
-                    "expr": "sum(increase(sentinel_blocked_requests_total[5m]))\n/\nsum(increase(sentinel_requests_total[5m]))",
-                    "instant": true,
-                    "legendFormat": "__auto",
-                    "range": false,
-                    "refId": "A"
-                }
-            ],
-            "title": "Blocked Traffic Ratio",
-            "type": "gauge"
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "cfgaf3ks1ex34d"
-            },
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "mappings": [],
-                    "max": 5,
-                    "min": 0,
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": 0
-                            },
-                            {
-                                "color": "#EAB839",
-                                "value": 2
-                            },
-                            {
-                                "color": "orange",
-                                "value": 3
-                            },
-                            {
-                                "color": "red",
-                                "value": 4
-                            }
-                        ]
-                    }
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 9,
-                "w": 24,
-                "x": 0,
-                "y": 54
-            },
-            "id": 8,
-            "options": {
-                "minVizHeight": 75,
-                "minVizWidth": 75,
-                "orientation": "auto",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "showThresholdLabels": false,
-                "showThresholdMarkers": true,
-                "sizing": "auto"
-            },
-            "pluginVersion": "12.4.1",
-            "targets": [
-                {
-                    "editorMode": "code",
-                    "expr": "sum(rate(sentinel_requests_total[1m]))\n/\nsum(rate(sentinel_requests_total[5m]))",
-                    "instant": true,
-                    "legendFormat": "__auto",
-                    "range": false,
-                    "refId": "A"
-                }
-            ],
-            "title": "Traffic Spike Detector",
-            "type": "gauge"
         }
     ],
     "preload": false,
+    "refresh": "5s",
     "schemaVersion": 42,
     "tags": [],
     "templating": {
         "list": []
     },
     "time": {
-        "from": "now-24h",
+        "from": "now-5m",
         "to": "now"
     },
     "timepicker": {},
     "timezone": "browser",
     "title": "Sentinel API Protection Dashboard",
     "uid": "ad9wx25",
-    "version": 26,
+    "version": 44,
     "weekStart": ""
 }

@@ -1,6 +1,6 @@
 
 const reputation = require("./reputation");
-const rateLimiter = require("./rateLimiter"); 
+const rateLimiter = require("./rateLimiter");
 const redis = require("./redisClient");
 const express = require("express");
 const logger = require("./logger");
@@ -43,6 +43,8 @@ app.use(async (req, res, next) => {
 
   if (blocked) {
     logger.warn({ ip, route }, "Blocked IP attempted request");
+
+    metrics.blockedCounter.inc({ route: req.path });
 
     return res.status(403).json({
       error: "IP temporarily blocked 🚫"
