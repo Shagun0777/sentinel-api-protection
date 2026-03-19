@@ -144,7 +144,7 @@ and cannot access the API until the block expires.
 
 # Running the Project
 
-## 1 Clone repository
+## Clone repository
 
 ```
 
@@ -156,7 +156,7 @@ cd sentinel-api-protection
 
 ---
 
-## 2 Start services
+## Start services
 
 ```
 
