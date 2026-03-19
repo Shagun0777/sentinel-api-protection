@@ -226,193 +226,91 @@ Expected behaviour:
 
 ---
 
-# Monitoring Dashboard
+# Attack Demonstration
 
-Sentinel exposes Prometheus metrics visualized using Grafana.
-
-The dashboard tracks:
-
-- total API requests
-- blocked requests
-- traffic rate
-- blocked request ratio
-- endpoint traffic
-- spike detection
+The following screenshots show Sentinel detecting and blocking a simulated API attack.
 
 ---
+
+## 1️⃣ Traffic Spike Detection
+
+When a large number of requests are sent in a short time window, Sentinel detects abnormal traffic spikes.
+
+![Traffic Spike Detection](screenshot/traffic-spike.jpeg)
+
+The **Traffic Spike Detector** compares short-term traffic against long-term averages.
+
+If the ratio exceeds the threshold, it indicates abnormal traffic.
+
+---
+
+## 2️⃣ Rate Limiter Blocking Requests
+
+Once the request threshold is exceeded, the rate limiter starts blocking requests.
+
+![Rate Limiter Blocking](screenshot/rate-limiter-block.jpeg)
+
+The dashboard shows:
+
+• increasing blocked requests  
+• endpoint receiving malicious traffic  
+• spike detection triggering
+
+---
+
+## 3️⃣ Reputation System Banning IP
+
+Repeated violations increase the IP reputation score.
+
+When the score exceeds the allowed limit, the IP is banned.
+
+Banned clients receive the following response:
+
+```http
+HTTP/1.1 403 Forbidden
+Content-Type: application/json
+
+{"error":"IP temporarily blocked 🚫"}
+```
+
+
+![IP Reputation Ban](screenshot/reputation-ban.jpeg)
+
+This ensures persistent attackers cannot continue sending requests.
+
+# Monitoring Dashboard
+
+Sentinel exposes Prometheus metrics that are visualized using a Grafana security dashboard.
+
+The dashboard provides real-time visibility into API traffic.
 
 ### Dashboard Overview
 
 ![Dashboard Overview](screenshot/dashboard-overview.jpeg)
 
----
+The dashboard tracks:
 
-# Total API Requests Panel
+• Total API requests  
+• Blocked requests  
+• Requests per second  
+• Traffic spike detection  
+• Blocked traffic ratio  
+• Endpoint attack distribution
 
-Prometheus query:
 
-```
 
-sum(increase(sentinel_requests_total[5m]))
+# Summary
 
-```
+Sentinel demonstrates how modern API protection systems work.
 
-Explanation:
+It combines:
 
-Shows the number of API requests received in the last 5 minutes.
+• distributed rate limiting  
+• reputation-based banning  
+• traffic spike detection  
+• real-time observability
 
-Screenshot:
-
-
-
----
-
-# Blocked Requests Panel
-
-Prometheus query:
-
-```
-
-sum(sentinel_blocked_requests_total)
-
-```
-
-Explanation:
-
-Displays the number of requests blocked by the rate limiter.
-
-Screenshot:
-
-
-
----
-
-# API Traffic Rate Panel
-
-Prometheus query:
-
-```
-
-sum by(route)(rate(sentinel_requests_total[1m]))
-
-```
-
-Explanation:
-
-Displays requests per second per endpoint.
-
-Screenshot:
-
-
-
----
-
-# Endpoint Traffic Distribution
-
-Prometheus query:
-
-```
-
-sum by(route)(increase(sentinel_requests_total[5m]))
-
-```
-
-Explanation:
-
-Shows which API endpoints receive the most traffic.
-
-Screenshot:
-
-
-
----
-
-# Blocked Traffic Ratio
-
-Prometheus query:
-
-```
-
-sum(increase(sentinel_blocked_requests_total[5m])) / sum(increase(sentinel_requests_total[5m]))
-
-```
-
-Explanation:
-
-Displays percentage of requests blocked by Sentinel.
-
-Screenshot:
-
-
-
----
-
-# Traffic Spike Detector
-
-Prometheus query:
-
-```
-
-sum(rate(sentinel_requests_total[1m])) / sum(rate(sentinel_requests_total[5m]))
-
-```
-
-Explanation:
-
-Detects abnormal spikes in traffic volume.
-
-Screenshot:
-
-
-
----
-
-# Deployment
-
-The project can be deployed using Docker on any cloud VM.
-
-Example platforms:
-
-- Oracle Cloud Free Tier
-- AWS EC2
-- Google Cloud VM
-- DigitalOcean
-
-Run:
-
-```
-docker compose up -d
-```
-
-Expose ports:
-
-```
-3000 API
-3001 Grafana
-9090 Prometheus
-```
-
----
-
-# Example Attack Monitoring
-
-Add a screenshot showing the dashboard during a simulated attack.
-
-
-
----
-
-# Metrics Exported
-
-Prometheus metrics exposed by Sentinel:
-
-```
-sentinel_requests_total
-sentinel_blocked_requests_total
-sentinel_rate_limit_hits
-```
-
----
+This architecture is similar to protections used by API gateways and edge security platforms.
 
 # Future Improvements
 
